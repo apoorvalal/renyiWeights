@@ -1,5 +1,5 @@
 ---
-title: Renyi Weights for Causal Inference
+title: Renyi divergence weights for Causal Inference and Reweighting
 author: Apoorva Lal
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -112,11 +112,56 @@ library(LalRUtils)
 library(renyiWeights)
 ```
 
+# Renyi Divergence
+
+Many problems involve reweighting a source sample $\mathcal{S}$ to
+resemble a target sample $\mathcal{T}$ by solving moment conditions.
+These problems can be cast into the following form:
+
+$$
+\text{min}_{w} D (w || d)
+$$
+
+subject to balance constraints
+$$
+  \sum_{i : i \in \mathcal{S}} w_i c_{ri}(\mathbf{X}_i) =  m_r(X_j) \text{ with } r \in 1, \dots, R
+$$
+
+and normalization
+$$
+  \sum_{i : i \in \mathcal{S}} w_i = | \mathcal{S}|
+$$
+
+Many candidate $D(w || d)$ distance metrics exist. A popular one is the KL divergence, which is given by
+
+$$
+D_1(w || d) = \sum_{i \in \mathcal{S}} w_i \log (w_i / d_i)
+$$
+
+Similarly, one may also choose
+
+$$
+D_2(w || d) = \log \left ( \sum_{i \in \mathcal{S}} w^2 /d_i  \right)
+$$
+
+These are both special cases of the Renyi family of divergences
+
+$$
+D(w || d) = D_\alpha(w || d) = \frac{1}{\alpha - 1} \log
+  \left( \sum_{i \in \mathcal{S}} \frac{w_i^\alpha}{d_i^{\alpha - 1}} \right)
+$$
+
+This package supports $D_1, D_2$ and more are in progress (although
+$D_1$ should suffice for most applications, especially since it is
+computationally attractive).
+
 # Entropy Balancing
 
-The Entropy balancing section builds on Hainmueller(2012) and accompanying r package `ebal`.
+The Entropy balancing section builds on Hainmueller(2012) and
+accompanying r package `ebal`.
 
-Entropy balancing for causal inference involves solving for balancing weights $w_i$ that solves the following (convex) program
+Entropy balancing for causal inference involves solving for balancing
+weights $w_i$ that solves the following (convex) program
 
 \begin{align*}
   \max_{\mathbf{w}} H(w) &= - \sum_{i : i \in \mathcal{S} } w_i \log w_i \\
@@ -125,9 +170,30 @@ Entropy balancing for causal inference involves solving for balancing weights $w
   0 \; \forall \; \{i: i \in \mathcal{S} \}
 \end{align*}
 
-This convex program has $R$ balance constraints that seek to equate functions $c_{ri}(X_i)$ in a source sample $\mathcal{S}$ to a target value $m_r$.
+This convex program has $R$ balance constraints that seek to equate
+functions $c_{ri}(X_i)$ in a source sample $\mathcal{S}$ to a target
+value $m_r$. This primal problem has dimension $n_0 + R + 1$.
 
-The dual of this problem is unconstrained and can be solved using Newton-Raphson.
+## Dual Formulation
+
+Duality holds in the Lagrangian for the above problem and constraints
+can be substituted out. The solution for each weight is attained by
+
+$$
+w_i^* = exp \left(  - \sum_{r =1}^R \lambda_r c_{ri} (\mathbf{X}_i) \right)
+$$
+
+where $Z = \{\lambda_1, \dots, \lambda_R\}'$ is a vector of Lagrange
+multipliers for the Lagrangian.
+
+Relevant extract from Hainmueller (2012):
+
+![](figs/hain_2012_dual.png)
+
+The dual Lagrangian has a much smaller dimension of $R$ and can be
+solved fast using Newton's method. We demonstrate the speed gains
+below in benchmarking.
+
 
 ## Basics : computing Average Treatment effect on the Treated (ATT)
 
@@ -166,24 +232,9 @@ feols(y ~ w, weights = ~wt, data = regdf, vcov = "HC1")
 ω_primal = eb_solve_primal(c(1, target), cbind(1, X))
 ωs = cbind(ω, ω_primal)
 # should lie along 45° line
-plot(ωs[, 1], ωs[,2]); abline(0, 1)
+plot(ωs[, 1], ωs[,2]); abline(0,1)
 ```
 
-### Dual v Primal speed comparison
-```{r}
-library(microbenchmark)
-microbenchmark(
-  primal = {
-    eb_solve_primal(c(1, target), cbind(1, X))
-  },
-  dual = {
-    eb_solve_dual(  c(1, target), cbind(1, X))
-  },
-  times = 100L
-)
-```
-
-The dual solver is much faster than the primal.
 
 ## Other Estimands: ATE
 
@@ -216,3 +267,23 @@ regdf = rbind(
 
 feols(y ~ w, weights = ~wt, data = regdf, vcov = "HC1")
 ```
+
+# Speed comparison
+
+```{r}
+library(microbenchmark)
+microbenchmark(
+  eb_primal = {
+    eb_solve_primal(c(1, target), cbind(1, X))
+  },
+  eb_dual = {
+    eb_solve_dual(  c(1, target), cbind(1, X))
+  },
+  qr_primal = {
+    qr_solve_primal(c(1, target), cbind(1, X))
+  },
+  times = 100L
+)
+```
+
+The dual solver is much faster than the primal for EB.

@@ -1,5 +1,5 @@
 # %% ####################################################
-#' Lightweight function to compute entropy balancing weights
+#' Compute entropy balancing weights that minimize KL divergence between uniform and solution weights. These are Renyi weights for α = 1
 #' @param X [data.frame, matrix] table of covariates for source sample (n x k)
 #' @param target_moments [vector, matrix] target moments to match X columns (1 x k)
 #' @param  max.iterations [200] stopping rule

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ebweights.R
 \name{entrBal}
 \alias{entrBal}
-\title{Lightweight function to compute entropy balancing weights}
+\title{Compute entropy balancing weights that minimize KL divergence between uniform and solution weights. These are Renyi weights for α = 1}
 \usage{
 entrBal(
   X,
@@ -30,5 +30,5 @@ entrBal(
 list containing a n-vector of weights
 }
 \description{
-Lightweight function to compute entropy balancing weights
+Compute entropy balancing weights that minimize KL divergence between uniform and solution weights. These are Renyi weights for α = 1
 }
