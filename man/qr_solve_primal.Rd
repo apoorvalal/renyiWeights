@@ -2,7 +2,7 @@
 % Please edit documentation in R/qrweights.R
 \name{qr_solve_primal}
 \alias{qr_solve_primal}
-\title{Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 1}
+\title{Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 2}
 \usage{
 qr_solve_primal(X1m, X0, base_weights = NULL, solv = "MOSEK")
 }
@@ -19,5 +19,5 @@ qr_solve_primal(X1m, X0, base_weights = NULL, solv = "MOSEK")
 list containing a n-vector of weights
 }
 \description{
-Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 1
+Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 2
 }

@@ -1,4 +1,4 @@
-#' Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 1
+#' Balancing weights to minimise quadratic divergence between uniform and solution weights. These are Renyi weights for α = 2
 #' @param X [data.frame, matrix] table of covariates for source sample (n x k)
 #' @param target_moments [vector, matrix] target moments to match X columns (1 x k)
 #' @param base weights n_0 vector of base weights
