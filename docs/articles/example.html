@@ -73,7 +73,7 @@ and Reweighting</h1>
                         <h4 data-toc-skip class="author">Apoorva
 Lal</h4>
             
-            <h4 data-toc-skip class="date">July 12, 2022</h4>
+            <h4 data-toc-skip class="date">July 19, 2022</h4>
       
       
       <div class="hidden name"><code>example.Rmd</code></div>
@@ -127,22 +127,27 @@ Lal</h4>
 }
 </style>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>
-  echo <span class="op">=</span>    <span class="cn">T</span>,          <span class="co"># don't show code</span>
-  include <span class="op">=</span> <span class="cn">T</span>,          <span class="co"># show output</span>
-  warning <span class="op">=</span> <span class="cn">F</span>,       <span class="co"># don't show warnings</span>
-  message <span class="op">=</span> <span class="cn">F</span>,       <span class="co"># don't show messages (less serious warnings)</span>
-  cache   <span class="op">=</span> <span class="cn">T</span>,       <span class="co"># F unless runtime is very long</span>
-  <span class="co"># root.dir = 'location_of_dependencies'</span>
-  fig.align <span class="op">=</span> <span class="st">"center"</span>
-<span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># for lalonde data</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">LalRUtils</span><span class="op">)</span>
-
 <span class="co"># load library</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">renyiWeights</span><span class="op">)</span></code></pre></div>
+<p>This package extends the functionality in <code>ebal</code> to a
+larger set of divergence measures and accommodates a general set of
+estimands.</p>
+<p>The <code>ebal</code> package is restricted to computing ATT since it
+expects a treatment vector and data matrix and solves for weights that
+set the covariate means in the control group to those in the treatment
+group. <code><a href="../reference/entrBal.html">renyiWeights::entrBal</a></code> expects a data matrix
+<code>X</code> and a target means vector <code>target</code>, which can
+accommodate a wide variety of estimands:</p>
+<ul>
+<li>treatment group mean for ATT</li>
+<li>overall sample mean for ATE</li>
+<li>subgroup means for CATE</li>
+<li>out-of-sample means for generalizability / survey reweighting</li>
+</ul>
+<p>The weights it produces can then be used in a linear regression
+without covariates.</p>
 <div class="section level2">
 <h2 id="renyi-divergence">Renyi Divergence<a class="anchor" aria-label="anchor" href="#renyi-divergence"></a>
 </h2>
@@ -227,7 +232,7 @@ compute <span class="math inline">\(\Exp{Y^1 - Y^0 | D = 1}\)</span>
 where the second counterfactual mean <span class="math inline">\(\Exp{Y^0|D=1}\)</span> is computed as a reweighted
 mean of the control group <span class="math inline">\(\sum_{i: D_i = 0}
 w_i Y_i\)</span>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># %%</span>
 <span class="co">############################################################</span>
 <span class="co"># ATT</span>
@@ -263,13 +268,14 @@ w_i Y_i\)</span>.</p>
 <div class="section level4">
 <h4 id="compare-primal-and-dual-solutions">Compare primal and dual solutions<a class="anchor" aria-label="anchor" href="#compare-primal-and-dual-solutions"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># %% check that primal and dual solutions are identical</span>
 <span class="va">ω_primal</span> <span class="op">=</span> <span class="fu"><a href="../reference/eb_solve_primal.html">eb_solve_primal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">target</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">X</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ωs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">ω</span>, <span class="va">ω_primal</span><span class="op">)</span>
 <span class="co"># should lie along 45° line</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ωs</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">ωs</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="example_files/figure-html/unnamed-chunk-4-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="example_files/figure-html/diagfig-1.png" width="700" style="display: block; margin: auto;"></p>
+<p>As expected, the weights are identical.</p>
 </div>
 </div>
 <div class="section level3">
@@ -277,7 +283,7 @@ w_i Y_i\)</span>.</p>
 </h3>
 <p>For the ATE, we need to reweight <em>both</em> treatment and control
 groups to equate covariate averages to the overall sample average.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># %%</span>
 <span class="co">############################################################</span>
 <span class="co"># ATE</span>
@@ -317,7 +323,7 @@ groups to equate covariate averages to the overall sample average.</p>
 <div class="section level2">
 <h2 id="speed-comparison">Speed comparison<a class="anchor" aria-label="anchor" href="#speed-comparison"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/joshuaulrich/microbenchmark/" class="external-link">microbenchmark</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span>
   eb_primal <span class="op">=</span> <span class="op">{</span>
@@ -333,13 +339,13 @@ groups to equate covariate averages to the overall sample average.</p>
 <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## Unit: milliseconds</span>
 <span class="co">##       expr         min          lq        mean      median          uq</span>
-<span class="co">##  eb_primal  326.636126  330.924455  347.354011  334.570904  341.716986</span>
-<span class="co">##    eb_dual    8.367091    8.667921    8.977015    8.929251    9.122504</span>
-<span class="co">##  qr_primal 1461.215455 1734.279726 1758.411906 1746.265234 1763.418958</span>
+<span class="co">##  eb_primal  323.923267  331.831341  379.005292  339.889250  354.380031</span>
+<span class="co">##    eb_dual    8.373995    8.533503    9.267221    8.719521    9.244629</span>
+<span class="co">##  qr_primal 1439.743452 1740.925114 1839.687712 1758.990169 1833.185587</span>
 <span class="co">##         max neval cld</span>
-<span class="co">##   642.37967   100  b </span>
-<span class="co">##    10.82597   100 a  </span>
-<span class="co">##  2579.82152   100   c</span></code></pre>
+<span class="co">##   732.00169   100  b </span>
+<span class="co">##    16.17057   100 a  </span>
+<span class="co">##  2948.89522   100   c</span></code></pre>
 <p>The dual solver is much faster than the primal for EB.</p>
 </div>
   </div>

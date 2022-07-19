@@ -91,7 +91,7 @@ $\\newcommand{\\pnorm}[1]{\\norm{#1}_p}$
 }
 </style>
 
-```{r}
+```{r, echo = F, include = F}
 rm(list = ls())
 knitr::opts_chunk$set(
   echo =    T,          # don't show code
@@ -99,7 +99,6 @@ knitr::opts_chunk$set(
   warning = F,       # don't show warnings
   message = F,       # don't show messages (less serious warnings)
   cache   = T,       # F unless runtime is very long
-  # root.dir = 'location_of_dependencies'
   fig.align = "center"
 )
 ```
@@ -107,10 +106,26 @@ knitr::opts_chunk$set(
 ```{r}
 # for lalonde data
 library(LalRUtils)
-
 # load library
 library(renyiWeights)
 ```
+
+This package extends the functionality in `ebal` to a larger set of divergence
+measures and accommodates a general set of estimands.
+
+The `ebal` package is restricted to computing ATT since it expects a treatment
+vector and data matrix and solves for weights that set the covariate means in
+the control group to those in the treatment group. `renyiWeights::entrBal`
+expects a data matrix `X` and a target means vector `target`, which can
+accommodate a wide variety of estimands:
+
++ treatment group mean for ATT
++ overall sample mean for ATE
++ subgroup means for CATE
++ out-of-sample means for generalizability / survey reweighting
+
+The weights it produces can then be used in a linear regression without
+covariates.
 
 # Renyi Divergence
 
@@ -197,7 +212,11 @@ below in benchmarking.
 
 ## Basics : computing Average Treatment effect on the Treated (ATT)
 
-In the most straightforward example of entropy balancing, we seek to reweight control observations $\{i: D_i = 0\}$ to match sample moments in the treated sample in order to compute $\Exp{Y^1 - Y^0 | D = 1}$ where the second counterfactual mean $\Exp{Y^0|D=1}$ is computed as a reweighted mean of the control group $\sum_{i: D_i = 0} w_i Y_i$.
+In the most straightforward example of entropy balancing, we seek to reweight
+control observations $\{i: D_i = 0\}$ to match sample moments in the treated
+sample in order to compute $\Exp{Y^1 - Y^0 | D = 1}$ where the second
+counterfactual mean $\Exp{Y^0|D=1}$ is computed as a reweighted mean of the
+control group $\sum_{i: D_i = 0} w_i Y_i$.
 
 ```{r}
 # %%
@@ -227,7 +246,7 @@ feols(y ~ w, weights = ~wt, data = regdf, vcov = "HC1")
 
 ### Compare primal and dual solutions
 
-```{r}
+```{r, diagfig}
 # %% check that primal and dual solutions are identical
 ω_primal = eb_solve_primal(c(1, target), cbind(1, X))
 ωs = cbind(ω, ω_primal)
@@ -235,10 +254,12 @@ feols(y ~ w, weights = ~wt, data = regdf, vcov = "HC1")
 plot(ωs[, 1], ωs[,2]); abline(0,1)
 ```
 
+As expected, the weights are identical.
 
 ## Other Estimands: ATE
 
-For the ATE, we need to reweight *both* treatment and control groups to equate covariate averages to the overall sample average.
+For the ATE, we need to reweight *both* treatment and control groups to equate
+covariate averages to the overall sample average.
 
 ```{r}
 # %%
