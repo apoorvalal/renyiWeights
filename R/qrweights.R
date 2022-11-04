@@ -7,19 +7,19 @@
 #' @import CVXR
 #' @export
 qr_solve_primal = function(X1m, X0, base_weights = NULL, solv = "MOSEK") {
-    wt = Variable(nrow(X0)) # weights are of length n_0
-    if(is.null(base_weights)){
-      objective = Minimize(sum(wt^2)) # quadratic weights
-    } else{
-      objective = Minimize(sum(wt^2/base_weights)) # quadratic weights
-    }
-    constraints = list(
-      sum(wt) == 1,       # now allowed to be negative, just need to sum to 1
-      t(X0) %*% wt == X1m # balance
-    )
-    prob = Problem(objective, constraints)
-    result = solve(prob, solver = 'MOSEK')
-    wt_hat = result$getValue(wt)
+  wt = Variable(nrow(X0)) # weights are of length n_0
+  if (is.null(base_weights)) {
+    objective = Minimize(sum(wt^2)) # quadratic weights
+  } else {
+    objective = Minimize(sum(wt^2 / base_weights)) # quadratic weights
+  }
+  constraints = list(
+    sum(wt) == 1, # now allowed to be negative, just need to sum to 1
+    t(X0) %*% wt == X1m # balance
+  )
+  prob = Problem(objective, constraints)
+  result = solve(prob, solver = 'MOSEK')
+  wt_hat = result$getValue(wt)
 }
 
 # %%
@@ -30,7 +30,7 @@ qr_solve_primal = function(X1m, X0, base_weights = NULL, solv = "MOSEK") {
 #' @return Regression vector beta of length ncol(X).
 #' @export
 #' @import car
-OLSw = function(y, X, w){
+OLSw = function(y, X, w) {
   XtWX = car::wcrossprod(X, w = w)
   XtWy = car::wcrossprod(X, y, w = w)
   solve(XtWX) %*% XtWy
