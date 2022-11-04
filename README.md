@@ -1,6 +1,6 @@
 # renyiWeights
 
-Package to solve for balancing weights using Renyi divergences (includes entropy balancing and quadratic balancing as a special cases).
+Package to solve for balancing weights using Renyi divergences. Includes `l1`, `l2`, and entropic regularisation weights.
 
 ## installation
 
