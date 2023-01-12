@@ -1,14 +1,14 @@
 # %% ####################################################
 #' Compute entropy balancing weights that minimize KL divergence between uniform and solution weights. These are Renyi weights for α = 1
-#' @param X [data.frame, matrix] table of covariates for source sample (n x k)
 #' @param target_moments [vector, matrix] target moments to match X columns (1 x k)
+#' @param X [data.frame, matrix] table of covariates for source sample (n x k)
 #' @param  max.iterations [200] stopping rule
 #' @param base.weights = [NULL] n-vector of baseline weights
 #' @param constraint.tolerance [1] value for constraint threshold
 #' @param print.level [0, 1, 2, 3] 0 is silent, 1 reports success, 2 and 3 are noisy (for debugging)
 #' @return list containing a n-vector of weights
 #' @export
-entrBal = function(X, target_moments,
+entrBal = function(target_moments, X,
                    max.iterations = 200L,
                    base.weights = NULL,
                    constraint.tolerance = 1, print.level = 0) {
