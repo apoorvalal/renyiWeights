@@ -9,9 +9,9 @@
 <title>Renyi divergence weights for Causal Inference and Reweighting • renyiWeights</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.4/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.4/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.4/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Renyi divergence weights for Causal Inference and Reweighting">
@@ -68,12 +68,14 @@
 
 
 
-<script src="example_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Renyi divergence weights for Causal Inference and Reweighting</h1>
-                        <h4 data-toc-skip class="author">Apoorva Lal</h4>
+                        <h4 data-toc-skip class="author">Apoorva
+Lal</h4>
             
-            <h4 data-toc-skip class="date">January 12, 2023</h4>
+            <h4 data-toc-skip class="date">May 08, 2023</h4>
       
       
       <div class="d-none name"><code>example.Rmd</code></div>
@@ -82,7 +84,42 @@
     
     
 <!--- For HTML renders - selection from math_shortcuts.tex --->
-<p><span class="math inline">\(\DeclareMathOperator*{\argmin}{argmin}\)</span> <span class="math inline">\(\newcommand{\var}{\mathrm{Var}}\)</span> <span class="math inline">\(\newcommand{\epsi}{\varepsilon}\)</span> <span class="math inline">\(\newcommand{\phii}{\varphi}\)</span> <span class="math inline">\(\newcommand{\tra}{^{\top}}\)</span> <span class="math inline">\(\newcommand{\sumin}{\sum_{i=1}^n}\)</span> <span class="math inline">\(\newcommand{\sumiN}{\sum_{i=1}^n}\)</span> <span class="math inline">\(\newcommand{\norm}[1]{\left\Vert{#1} \right\Vert}\)</span> <span class="math inline">\(\newcommand\Bigpar[1]{\left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Bigbr[1]{\left[ #1 \right ]}\)</span> <span class="math inline">\(\newcommand\Bigcr[1]{\left\{ #1 \right \}}\)</span> <span class="math inline">\(\newcommand\SetB[1]{\left\{ #1 \right\}}\)</span> <span class="math inline">\(\newcommand\Sett[1]{\mathcal{#1}}\)</span> <span class="math inline">\(\newcommand{\Data}{\mathcal{D}}\)</span> <span class="math inline">\(\newcommand{\Ubr}[2]{\underbrace{#1}_{\text{#2}}}\)</span> <span class="math inline">\(\newcommand{\Obr}[2]{ \overbrace{#1}^{\text{#2}}}\)</span> <span class="math inline">\(\newcommand{\sumiN}{\sum_{i=1}^N}\)</span> <span class="math inline">\(\newcommand{\dydx}[2]{\frac{\partial #1}{\partial #2}}\)</span> <span class="math inline">\(\newcommand\Indic[1]{\mathds{1}_{#1}}\)</span> <span class="math inline">\(\newcommand{\Realm}[1]{\mathbb{R}^{#1}}\)</span> <span class="math inline">\(\newcommand{\Exp}[1]{\mathbb{E}\left[#1\right]}\)</span> <span class="math inline">\(\newcommand{\Expt}[2]{\mathbb{E}_{#1}\left[#2\right]}\)</span> <span class="math inline">\(\newcommand{\Var}[1]{\mathbb{V}\left[#1\right]}\)</span> <span class="math inline">\(\newcommand{\Covar}[1]{\text{Cov}\left[#1\right]}\)</span> <span class="math inline">\(\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}\)</span> <span class="math inline">\(\newcommand{\Supp}[1]{\text{Supp}\left[#1\right]}\)</span> <span class="math inline">\(\newcommand{\doyx}{\Prob{Y \, |\,\mathsf{do} (X = x)}}\)</span> <span class="math inline">\(\newcommand{\doo}[1]{\Prob{Y |\,\mathsf{do} (#1) }}\)</span> <span class="math inline">\(\newcommand{\R}{\mathbb{R}}\)</span> <span class="math inline">\(\newcommand{\Z}{\mathbb{Z}}\)</span> <span class="math inline">\(\newcommand{\wh}[1]{\widehat{#1}}\)</span> <span class="math inline">\(\newcommand{\wt}[1]{\widetilde{#1}}\)</span> <span class="math inline">\(\newcommand{\wb}[1]{\overline{#1}}\)</span> <span class="math inline">\(\newcommand\Ol[1]{\overline{#1}}\)</span> <span class="math inline">\(\newcommand\Ul[1]{\underline{#1}}\)</span> <span class="math inline">\(\newcommand\Str[1]{#1^{*}}\)</span> <span class="math inline">\(\newcommand{\F}{\mathsf{F}}\)</span> <span class="math inline">\(\newcommand{\ff}{\mathsf{f}}\)</span> <span class="math inline">\(\newcommand{\Cdf}[1]{\mathbb{F}\left(#1\right)}\)</span> <span class="math inline">\(\newcommand{\Cdff}[2]{\mathbb{F}_{#1}\left(#2\right)}\)</span> <span class="math inline">\(\newcommand{\Pdf}[1]{\mathsf{f}\left(#1\right)}\)</span> <span class="math inline">\(\newcommand{\Pdff}[2]{\mathsf{f}_{#1}\left(#2\right)}\)</span> <span class="math inline">\(\newcommand{\dd}{\mathsf{d}}\)</span> <span class="math inline">\(\newcommand\Normal[1]{\mathcal{N} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Unif[1]{\mathsf{U} \left[ #1 \right ]}\)</span> <span class="math inline">\(\newcommand\Bern[1]{\mathsf{Bernoulli} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Binom[1]{\mathsf{Bin} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Pois[1]{\mathsf{Poi} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\BetaD[1]{\mathsf{Beta} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Diri[1]{\mathsf{Dir} \left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\Gdist[1]{\mathsf{Gamma} \left( #1 \right )}\)</span> <span class="math inline">\(\def\mbf#1{\mathbf{#1}}\)</span> <span class="math inline">\(\def\mrm#1{\mathrm{#1}}\)</span> <span class="math inline">\(\def\mbi#1{\boldsymbol{#1}}\)</span> <span class="math inline">\(\def\ve#1{\mbi{#1}}\)</span> <span class="math inline">\(\def\vee#1{\mathbf{#1}}\)</span> <span class="math inline">\(\newcommand{\Mat}[1]{\mathbf{#1}}\)</span> <span class="math inline">\(\newcommand{\eucN}[1]{\norm{#1}}\)</span> <span class="math inline">\(\newcommand{\lzero}[1]{\norm{#1}_0}\)</span> <span class="math inline">\(\newcommand{\lone}[1]{\norm{#1}_1}\)</span> <span class="math inline">\(\newcommand{\ltwo}[1]{\norm{#1}_2}\)</span> <span class="math inline">\(\newcommand{\pnorm}[1]{\norm{#1}_p}\)</span></p>
+<p><span class="math inline">\(\DeclareMathOperator*{\argmin}{argmin}\)</span>
+<span class="math inline">\(\newcommand{\var}{\mathrm{Var}}\)</span>
+<span class="math inline">\(\newcommand{\epsi}{\varepsilon}\)</span>
+<span class="math inline">\(\newcommand{\phii}{\varphi}\)</span> <span class="math inline">\(\newcommand{\tra}{^{\top}}\)</span> <span class="math inline">\(\newcommand{\sumin}{\sum_{i=1}^n}\)</span> <span class="math inline">\(\newcommand{\sumiN}{\sum_{i=1}^n}\)</span> <span class="math inline">\(\newcommand{\norm}[1]{\left\Vert{#1}
+\right\Vert}\)</span> <span class="math inline">\(\newcommand\Bigpar[1]{\left( #1 \right )}\)</span>
+<span class="math inline">\(\newcommand\Bigbr[1]{\left[ #1 \right
+]}\)</span> <span class="math inline">\(\newcommand\Bigcr[1]{\left\{ #1
+\right \}}\)</span> <span class="math inline">\(\newcommand\SetB[1]{\left\{ #1 \right\}}\)</span>
+<span class="math inline">\(\newcommand\Sett[1]{\mathcal{#1}}\)</span>
+<span class="math inline">\(\newcommand{\Data}{\mathcal{D}}\)</span>
+<span class="math inline">\(\newcommand{\Ubr}[2]{\underbrace{#1}_{\text{#2}}}\)</span>
+<span class="math inline">\(\newcommand{\Obr}[2]{
+\overbrace{#1}^{\text{#2}}}\)</span> <span class="math inline">\(\newcommand{\sumiN}{\sum_{i=1}^N}\)</span> <span class="math inline">\(\newcommand{\dydx}[2]{\frac{\partial #1}{\partial
+#2}}\)</span> <span class="math inline">\(\newcommand\Indic[1]{\mathds{1}_{#1}}\)</span>
+<span class="math inline">\(\newcommand{\Realm}[1]{\mathbb{R}^{#1}}\)</span>
+<span class="math inline">\(\newcommand{\Exp}[1]{\mathbb{E}\left[#1\right]}\)</span>
+<span class="math inline">\(\newcommand{\Expt}[2]{\mathbb{E}_{#1}\left[#2\right]}\)</span>
+<span class="math inline">\(\newcommand{\Var}[1]{\mathbb{V}\left[#1\right]}\)</span>
+<span class="math inline">\(\newcommand{\Covar}[1]{\text{Cov}\left[#1\right]}\)</span>
+<span class="math inline">\(\newcommand{\Prob}[1]{\mathbf{Pr}\left(#1\right)}\)</span>
+<span class="math inline">\(\newcommand{\Supp}[1]{\text{Supp}\left[#1\right]}\)</span>
+<span class="math inline">\(\newcommand{\doyx}{\Prob{Y \, |\,\mathsf{do}
+(X = x)}}\)</span> <span class="math inline">\(\newcommand{\doo}[1]{\Prob{Y |\,\mathsf{do} (#1)
+}}\)</span> <span class="math inline">\(\newcommand{\R}{\mathbb{R}}\)</span> <span class="math inline">\(\newcommand{\Z}{\mathbb{Z}}\)</span> <span class="math inline">\(\newcommand{\wh}[1]{\widehat{#1}}\)</span> <span class="math inline">\(\newcommand{\wt}[1]{\widetilde{#1}}\)</span> <span class="math inline">\(\newcommand{\wb}[1]{\overline{#1}}\)</span> <span class="math inline">\(\newcommand\Ol[1]{\overline{#1}}\)</span> <span class="math inline">\(\newcommand\Ul[1]{\underline{#1}}\)</span> <span class="math inline">\(\newcommand\Str[1]{#1^{*}}\)</span> <span class="math inline">\(\newcommand{\F}{\mathsf{F}}\)</span> <span class="math inline">\(\newcommand{\ff}{\mathsf{f}}\)</span> <span class="math inline">\(\newcommand{\Cdf}[1]{\mathbb{F}\left(#1\right)}\)</span>
+<span class="math inline">\(\newcommand{\Cdff}[2]{\mathbb{F}_{#1}\left(#2\right)}\)</span>
+<span class="math inline">\(\newcommand{\Pdf}[1]{\mathsf{f}\left(#1\right)}\)</span>
+<span class="math inline">\(\newcommand{\Pdff}[2]{\mathsf{f}_{#1}\left(#2\right)}\)</span>
+<span class="math inline">\(\newcommand{\dd}{\mathsf{d}}\)</span> <span class="math inline">\(\newcommand\Normal[1]{\mathcal{N} \left( #1 \right
+)}\)</span> <span class="math inline">\(\newcommand\Unif[1]{\mathsf{U}
+\left[ #1 \right ]}\)</span> <span class="math inline">\(\newcommand\Bern[1]{\mathsf{Bernoulli} \left( #1
+\right )}\)</span> <span class="math inline">\(\newcommand\Binom[1]{\mathsf{Bin} \left( #1 \right
+)}\)</span> <span class="math inline">\(\newcommand\Pois[1]{\mathsf{Poi}
+\left( #1 \right )}\)</span> <span class="math inline">\(\newcommand\BetaD[1]{\mathsf{Beta} \left( #1
+\right )}\)</span> <span class="math inline">\(\newcommand\Diri[1]{\mathsf{Dir} \left( #1 \right
+)}\)</span> <span class="math inline">\(\newcommand\Gdist[1]{\mathsf{Gamma} \left( #1
+\right )}\)</span> <span class="math inline">\(\def\mbf#1{\mathbf{#1}}\)</span> <span class="math inline">\(\def\mrm#1{\mathrm{#1}}\)</span> <span class="math inline">\(\def\mbi#1{\boldsymbol{#1}}\)</span> <span class="math inline">\(\def\ve#1{\mbi{#1}}\)</span> <span class="math inline">\(\def\vee#1{\mathbf{#1}}\)</span> <span class="math inline">\(\newcommand{\Mat}[1]{\mathbf{#1}}\)</span> <span class="math inline">\(\newcommand{\eucN}[1]{\norm{#1}}\)</span> <span class="math inline">\(\newcommand{\lzero}[1]{\norm{#1}_0}\)</span> <span class="math inline">\(\newcommand{\lone}[1]{\norm{#1}_1}\)</span> <span class="math inline">\(\newcommand{\ltwo}[1]{\norm{#1}_2}\)</span> <span class="math inline">\(\newcommand{\pnorm}[1]{\norm{#1}_p}\)</span></p>
 <style type="text/css">
 .main-container {
   max-width: 1800px;
@@ -95,29 +132,42 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">LalRUtils</span><span class="op">)</span></span>
 <span><span class="co"># load library</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">renyiWeights</span><span class="op">)</span></span></code></pre></div>
-<p>This package extends the functionality in <code>ebal</code> to a larger set of divergence measures and accommodates a general set of estimands.</p>
-<p>The <code>ebal</code> package is restricted to computing ATT since it expects a treatment vector and data matrix and solves for weights that set the covariate means in the control group to those in the treatment group. <code><a href="../reference/entrBal.html">renyiWeights::entrBal</a></code> expects a data matrix <code>X</code> and a target means vector <code>target</code>, which can accommodate a wide variety of estimands:</p>
+<p>This package extends the functionality in <code>ebal</code> to a
+larger set of divergence measures and accommodates a general set of
+estimands.</p>
+<p>The <code>ebal</code> package is restricted to computing ATT since it
+expects a treatment vector and data matrix and solves for weights that
+set the covariate means in the control group to those in the treatment
+group. <code><a href="../reference/entrBal.html">renyiWeights::entrBal</a></code> expects a data matrix
+<code>X</code> and a target means vector <code>target</code>, which can
+accommodate a wide variety of estimands:</p>
 <ul>
 <li>treatment group mean for ATT</li>
 <li>overall sample mean for ATE</li>
 <li>subgroup means for CATE</li>
 <li>out-of-sample means for generalizability / survey reweighting</li>
 </ul>
-<p>The weights it produces can then be used in a linear regression without covariates.</p>
+<p>The weights it produces can then be used in a linear regression
+without covariates.</p>
 <div class="section level2">
 <h2 id="renyi-divergence">Renyi Divergence<a class="anchor" aria-label="anchor" href="#renyi-divergence"></a>
 </h2>
-<p>Many problems involve reweighting a source sample <span class="math inline">\(\mathcal{S}\)</span> to resemble a target sample <span class="math inline">\(\mathcal{T}\)</span> by solving moment conditions. These problems can be cast into the following form:</p>
+<p>Many problems involve reweighting a source sample <span class="math inline">\(\mathcal{S}\)</span> to resemble a target sample
+<span class="math inline">\(\mathcal{T}\)</span> by solving moment
+conditions. These problems can be cast into the following form:</p>
 <p><span class="math display">\[
 \text{min}_{w} D (w || d)
 \]</span></p>
 <p>subject to balance constraints <span class="math display">\[
-  \sum_{i : i \in \mathcal{S}} w_i c_{ri}(\mathbf{X}_i) =  m_r(X_j) \text{ with } r \in 1, \dots, R
+  \sum_{i : i \in \mathcal{S}} w_i c_{ri}(\mathbf{X}_i) =  m_r(X_j)
+\text{ with } r \in 1, \dots, R
 \]</span></p>
 <p>and normalization <span class="math display">\[
   \sum_{i : i \in \mathcal{S}} w_i = | \mathcal{S}|
 \]</span></p>
-<p>Many candidate <span class="math inline">\(D(w || d)\)</span> distance metrics exist. A popular one is the KL divergence, which is given by</p>
+<p>Many candidate <span class="math inline">\(D(w || d)\)</span>
+distance metrics exist. A popular one is the KL divergence, which is
+given by</p>
 <p><span class="math display">\[
 D_1(w || d) = \sum_{i \in \mathcal{S}} w_i \log (w_i / d_i)
 \]</span></p>
@@ -128,38 +178,61 @@ D_2(w || d) = \log \left ( \sum_{i \in \mathcal{S}} w^2 /d_i  \right)
 <p>These are both special cases of the Renyi family of divergences</p>
 <p><span class="math display">\[
 D(w || d) = D_\alpha(w || d) = \frac{1}{\alpha - 1} \log
-  \left( \sum_{i \in \mathcal{S}} \frac{w_i^\alpha}{d_i^{\alpha - 1}} \right)
+  \left( \sum_{i \in \mathcal{S}} \frac{w_i^\alpha}{d_i^{\alpha - 1}}
+\right)
 \]</span></p>
-<p>This package supports <span class="math inline">\(D_1, D_2\)</span> and more are in progress (although <span class="math inline">\(D_1\)</span> should suffice for most applications, especially since it is computationally attractive).</p>
+<p>This package supports <span class="math inline">\(D_1, D_2\)</span>
+and more are in progress (although <span class="math inline">\(D_1\)</span> should suffice for most applications,
+especially since it is computationally attractive).</p>
 </div>
 <div class="section level2">
 <h2 id="entropy-balancing">Entropy Balancing<a class="anchor" aria-label="anchor" href="#entropy-balancing"></a>
 </h2>
-<p>The Entropy balancing section builds on Hainmueller(2012) and accompanying r package <code>ebal</code>.</p>
-<p>Entropy balancing for causal inference involves solving for balancing weights <span class="math inline">\(w_i\)</span> that solves the following (convex) program</p>
+<p>The Entropy balancing section builds on Hainmueller(2012) and
+accompanying r package <code>ebal</code>.</p>
+<p>Entropy balancing for causal inference involves solving for balancing
+weights <span class="math inline">\(w_i\)</span> that solves the
+following (convex) program</p>
 <p><span class="math display">\[\begin{align*}
-  \max_{\mathbf{w}} H(w) &amp;= - \sum_{i : i \in \mathcal{S} } w_i \log w_i \\
-  \text{Balance constraints:} &amp; \sum_{i : i \in \mathcal{S}} w_i c_{ri}(\mathbf{X}_i) =  m_r(X_j) \text{ with } r \in 1, \dots, R   \\
-  \text{Proper weights:} &amp; \sum_{i : i \in \mathcal{S}} w_i = 1 \; \; \text{and } w_i \geq
+  \max_{\mathbf{w}} H(w) &amp;= - \sum_{i : i \in \mathcal{S} } w_i \log
+w_i \\
+  \text{Balance constraints:} &amp; \sum_{i : i \in \mathcal{S}} w_i
+c_{ri}(\mathbf{X}_i) =  m_r(X_j) \text{ with } r \in 1, \dots, R   \\
+  \text{Proper weights:} &amp; \sum_{i : i \in \mathcal{S}} w_i = 1 \;
+\; \text{and } w_i \geq
   0 \; \forall \; \{i: i \in \mathcal{S} \}
 \end{align*}\]</span></p>
-<p>This convex program has <span class="math inline">\(R\)</span> balance constraints that seek to equate functions <span class="math inline">\(c_{ri}(X_i)\)</span> in a source sample <span class="math inline">\(\mathcal{S}\)</span> to a target value <span class="math inline">\(m_r\)</span>. This primal problem has dimension <span class="math inline">\(n_0 + R + 1\)</span>.</p>
+<p>This convex program has <span class="math inline">\(R\)</span>
+balance constraints that seek to equate functions <span class="math inline">\(c_{ri}(X_i)\)</span> in a source sample <span class="math inline">\(\mathcal{S}\)</span> to a target value <span class="math inline">\(m_r\)</span>. This primal problem has dimension
+<span class="math inline">\(n_0 + R + 1\)</span>.</p>
 <div class="section level3">
 <h3 id="dual-formulation">Dual Formulation<a class="anchor" aria-label="anchor" href="#dual-formulation"></a>
 </h3>
-<p>Duality holds in the Lagrangian for the above problem and constraints can be substituted out. The solution for each weight is attained by</p>
+<p>Duality holds in the Lagrangian for the above problem and constraints
+can be substituted out. The solution for each weight is attained by</p>
 <p><span class="math display">\[
-w_i^* = exp \left(  - \sum_{r =1}^R \lambda_r c_{ri} (\mathbf{X}_i) \right)
+w_i^* = exp \left(  - \sum_{r =1}^R \lambda_r c_{ri} (\mathbf{X}_i)
+\right)
 \]</span></p>
-<p>where <span class="math inline">\(Z = \{\lambda_1, \dots, \lambda_R\}'\)</span> is a vector of Lagrange multipliers for the Lagrangian.</p>
+<p>where <span class="math inline">\(Z = \{\lambda_1, \dots,
+\lambda_R\}'\)</span> is a vector of Lagrange multipliers for the
+Lagrangian.</p>
 <p>Relevant extract from Hainmueller (2012):</p>
 <p><img src="figs/hain_2012_dual.png"></p>
-<p>The dual Lagrangian has a much smaller dimension of <span class="math inline">\(R\)</span> and can be solved fast using Newton’s method. We demonstrate the speed gains below in benchmarking.</p>
+<p>The dual Lagrangian has a much smaller dimension of <span class="math inline">\(R\)</span> and can be solved fast using Newton’s
+method. We demonstrate the speed gains below in benchmarking.</p>
 </div>
 <div class="section level3">
-<h3 id="basics-computing-average-treatment-effect-on-the-treated-att">Basics : computing Average Treatment effect on the Treated (ATT)<a class="anchor" aria-label="anchor" href="#basics-computing-average-treatment-effect-on-the-treated-att"></a>
+<h3 id="basics-computing-average-treatment-effect-on-the-treated-att">Basics : computing Average Treatment effect on the Treated
+(ATT)<a class="anchor" aria-label="anchor" href="#basics-computing-average-treatment-effect-on-the-treated-att"></a>
 </h3>
-<p>In the most straightforward example of entropy balancing, we seek to reweight control observations <span class="math inline">\(\{i: D_i = 0\}\)</span> to match sample moments in the treated sample in order to compute <span class="math inline">\(\Exp{Y^1 - Y^0 | D = 1}\)</span> where the second counterfactual mean <span class="math inline">\(\Exp{Y^0|D=1}\)</span> is computed as a reweighted mean of the control group <span class="math inline">\(\sum_{i: D_i = 0} w_i Y_i\)</span>.</p>
+<p>In the most straightforward example of entropy balancing, we seek to
+reweight control observations <span class="math inline">\(\{i: D_i =
+0\}\)</span> to match sample moments in the treated sample in order to
+compute <span class="math inline">\(\Exp{Y^1 - Y^0 | D = 1}\)</span>
+where the second counterfactual mean <span class="math inline">\(\Exp{Y^0|D=1}\)</span> is computed as a reweighted
+mean of the control group <span class="math inline">\(\sum_{i: D_i = 0}
+w_i Y_i\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># %%</span></span>
 <span><span class="co">############################################################</span></span>
@@ -209,7 +282,8 @@ w_i^* = exp \left(  - \sum_{r =1}^R \lambda_r c_{ri} (\mathbf{X}_i) \right)
 <div class="section level3">
 <h3 id="other-estimands-ate">Other Estimands: ATE<a class="anchor" aria-label="anchor" href="#other-estimands-ate"></a>
 </h3>
-<p>For the ATE, we need to reweight <em>both</em> treatment and control groups to equate covariate averages to the overall sample average.</p>
+<p>For the ATE, we need to reweight <em>both</em> treatment and control
+groups to equate covariate averages to the overall sample average.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># %%</span></span>
 <span><span class="co">############################################################</span></span>

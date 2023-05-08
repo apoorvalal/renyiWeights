@@ -12,14 +12,10 @@ entrBal = function(target_moments, X,
                    max.iterations = 200L,
                    base.weights = NULL,
                    constraint.tolerance = 1, print.level = 0) {
-  X = as.matrix(X);
-  nsource = nrow(X)
+  X = as.matrix(X); nsource = nrow(X)
   if (is.null(base.weights)) base.weight = rep(1, nsource)
   # n0 X C
-  X0 = cbind(1, X)
-  # rank check
-  if (qr(X0)$rank != ncol(X0))
-    stop("collinearity in covariate matrix for controls (remove collinear covariates)")
+  X0 = cbind(1 / nsource, X)
   # intercept plus target moments
   # C-vector
   X1m = c(1, target_moments)
@@ -37,8 +33,7 @@ entrBal = function(target_moments, X,
   )
   if (eb.out$converged == TRUE & print.level > 0)
     cat("Converged within tolerance \n")
-  z = eb.out$Weights.ebal
-  return(z)
+  return(eb.out$Weights.ebal)
 }
 
 #' Entropy balancing by solving primal
@@ -80,14 +75,6 @@ eb_solve_dual = function(X1m, X0,
                          sparisfy = FALSE) {
   if (is.null(coefs)) coefs = rep(0, ncol(X0))
   if (is.null(base.weight)) base.weight = rep(1, nrow(X0))
-
-  # !TODO make this work with sparse matrices
-  # if (sparsify) {
-  #   X0          = as(X0, "dgCMatrix")
-  #   base.weight = as(base.weight, "sparseVector")
-  #   X1m         = as(X1m, "sparseVector")
-  # }
-
   converged = FALSE
   for (iter in 1:max.iterations) {
     # Z is a R-vector of solution coefficients (coefs)
