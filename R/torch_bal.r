@@ -89,7 +89,7 @@ ebal_torch = function(X0, X1) {
   # call optim - fn needs to have numeric output
   λ = optim(
     fn = \(x) as.numeric(ebal_loss_torch(x)),
-    gr = loss_grad, par = rep(1, ncol(X)),
+    gr = loss_grad, par = rep(1, ncol(X0)),
     method = "BFGS"
   )$par
   # extract weights from lagrangian
